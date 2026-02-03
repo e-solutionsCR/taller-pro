@@ -1,0 +1,38 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model Client {
+  id        Int      @id @default(autoincrement())
+  cedula    String   @unique
+  nombre    String
+  email     String?
+  telefono  String?
+  direccion String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+  Ticket    Ticket[]
+}
+
+model Ticket {
+  id              Int      @id @default(autoincrement())
+  codigo          String   @unique
+  descripcion     String
+  tipoDispositivo String
+  marcaModelo     String?
+  numeroSerie     String?
+  password        String?
+  diagnostico     String?
+  costo           Decimal?
+  status          String   @default("RECIBIDO")
+  clientId        Int
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime
+  Client          Client   @relation(fields: [clientId], references: [id])
+
+  @@index([clientId], map: "Ticket_clientId_fkey")
+}
