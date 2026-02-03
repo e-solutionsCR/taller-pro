@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
+export const dynamic = 'force-dynamic';
+
 // GET /api/clients?cedula=XXX - Buscar cliente por cédula
 export async function GET(request: Request) {
     try {
@@ -10,9 +12,6 @@ export async function GET(request: Request) {
         if (!cedula) {
             return NextResponse.json({ error: 'Cédula es requerida' }, { status: 400 });
         }
-
-        const fs = require('fs');
-        fs.appendFileSync('d:\\000_E-solutions\\api_log.txt', `[${new Date().toISOString()}] Searching client: ${cedula}\n`);
 
         const client = await prisma.client.findUnique({
             where: { cedula },
