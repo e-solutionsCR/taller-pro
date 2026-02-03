@@ -15,7 +15,7 @@ model Client {
   direccion String?
   createdAt DateTime @default(now())
   updatedAt DateTime
-  Ticket    Ticket[]
+  tickets   Ticket[]
 }
 
 model Ticket {
