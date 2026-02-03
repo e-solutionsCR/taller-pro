@@ -5,7 +5,7 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = "mysql://mariadb:2Pgt1yHb4zxjjB2KMzhbtllZpnn6FD1ddNdE3VJ4KvvHamwtsYmhZqYPA9mdtLdl@s4c4s0kg00cscg0ks8k8go8o:3306/ticketsystem"
+  url      = env("DATABASE_URL")
 }
 
 model Client {
