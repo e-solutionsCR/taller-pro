@@ -1,15 +1,12 @@
 import { PrismaClient } from '@prisma/client'
 
-const prismaClientSingleton = () => {
-    const url = process.env.DATABASE_URL
-    console.log('--- PRISMA DEBUG ---')
-    console.log('URL length:', url?.length)
-    console.log('URL starts with:', url?.substring(0, 10))
+const DB_URL = "mysql://mariadb:2Pgt1yHb4zxjjB2KMzhbtllZpnn6FD1ddNdE3VJ4KvvHamwtsYmhZqYPA9mdtLdl@s4c4s0kg00cscg0ks8k8go8o:3306/ticketsystem"
 
+const prismaClientSingleton = () => {
     return new PrismaClient({
         datasources: {
             db: {
-                url: url
+                url: DB_URL
             }
         }
     })
