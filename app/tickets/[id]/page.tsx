@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 
 interface Client {
     cedula: string;
@@ -25,8 +25,11 @@ interface Ticket {
     client: Client;
 }
 
-export default function TicketDetailPage({ params }: { params: { id: string } }) {
+export default function TicketDetailPage() {
     const router = useRouter();
+    const params = useParams();
+    const ticketId = params.id as string;
+
     const [ticket, setTicket] = useState<Ticket | null>(null);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
@@ -36,12 +39,14 @@ export default function TicketDetailPage({ params }: { params: { id: string } })
     const [status, setStatus] = useState('RECIBIDO');
 
     useEffect(() => {
-        fetchTicket();
-    }, [params.id]);
+        if (ticketId) {
+            fetchTicket();
+        }
+    }, [ticketId]);
 
     const fetchTicket = async () => {
         try {
-            const res = await fetch(`/api/tickets/${params.id}`);
+            const res = await fetch(`/api/tickets/${ticketId}`);
             const data = await res.json();
 
             if (data.ticket) {
@@ -60,7 +65,7 @@ export default function TicketDetailPage({ params }: { params: { id: string } })
     const handleUpdate = async () => {
         setSaving(true);
         try {
-            const res = await fetch(`/api/tickets/${params.id}`, {
+            const res = await fetch(`/api/tickets/${ticketId}`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -99,6 +104,12 @@ export default function TicketDetailPage({ params }: { params: { id: string } })
             <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-8">
                 <div className="max-w-4xl mx-auto">
                     <p className="text-center text-red-600">Ticket no encontrado</p>
+                    <button
+                        onClick={() => router.push('/')}
+                        className="mt-4 mx-auto block px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                    >
+                        Volver al Dashboard
+                    </button>
                 </div>
             </div>
         );
