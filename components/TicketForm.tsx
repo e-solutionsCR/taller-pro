@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { Search, Loader2, Save, UserCheck, Lock } from "lucide-react";
@@ -28,6 +28,28 @@ export default function TicketForm() {
     const [clientSaved, setClientSaved] = useState(false);
     const [clientId, setClientId] = useState<number | null>(null);
     const [statusMessage, setStatusMessage] = useState({ type: "", text: "" });
+    const [tipos, setTipos] = useState<Array<{ id: number; nombre: string }>>([]);
+    const [marcas, setMarcas] = useState<Array<{ id: number; nombre: string }>>([]);
+
+    // Cargar catálogos al inicio
+    useEffect(() => {
+        const loadCatalogs = async () => {
+            try {
+                const [tiposRes, marcasRes] = await Promise.all([
+                    fetch('/api/catalogs/tipos'),
+                    fetch('/api/catalogs/marcas')
+                ]);
+                const tiposData = await tiposRes.json();
+                const marcasData = await marcasRes.json();
+
+                if (tiposData.tipos) setTipos(tiposData.tipos.filter((t: any) => t.activo));
+                if (marcasData.marcas) setMarcas(marcasData.marcas.filter((m: any) => m.activo));
+            } catch (error) {
+                console.error('Error loading catalogs:', error);
+            }
+        };
+        loadCatalogs();
+    }, []);
 
     const handleCedulaSearch = async () => {
         const cedula = watch("cedula");
@@ -261,25 +283,31 @@ export default function TicketForm() {
                         <div className="space-y-4">
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-sm font-semibold mb-2">Categoría</label>
+                                    <label className="block text-sm font-semibold mb-2">Tipo de Dispositivo</label>
                                     <select
                                         {...register("tipoDispositivo")}
                                         className="w-full bg-muted/50 border rounded-xl px-4 py-2.5 outline-none"
                                     >
-                                        <option value="Laptop">Laptop / Portátil</option>
-                                        <option value="PC">PC Escritorio</option>
-                                        <option value="Celular">Celular / Tablet</option>
-                                        <option value="Consola">Consola</option>
-                                        <option value="Otro">Otro</option>
+                                        {tipos.length > 0 ? (
+                                            tipos.map(tipo => (
+                                                <option key={tipo.id} value={tipo.nombre}>{tipo.nombre}</option>
+                                            ))
+                                        ) : (
+                                            <option value="">Cargando...</option>
+                                        )}
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-semibold mb-2">Marca / Modelo</label>
-                                    <input
+                                    <label className="block text-sm font-semibold mb-2">Marca</label>
+                                    <select
                                         {...register("marcaModelo")}
                                         className="w-full bg-muted/50 border rounded-xl px-4 py-2.5 outline-none"
-                                        placeholder="Ej: Lenovo ThinkPad"
-                                    />
+                                    >
+                                        <option value="">Seleccione marca...</option>
+                                        {marcas.map(marca => (
+                                            <option key={marca.id} value={marca.nombre}>{marca.nombre}</option>
+                                        ))}
+                                    </select>
                                 </div>
                             </div>
 
