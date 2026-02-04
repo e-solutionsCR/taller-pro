@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
+import ThermalPrint from '@/components/ThermalPrint';
 
 interface Client {
     cedula: string;
@@ -135,9 +136,9 @@ export default function TicketDetailPage() {
                     <div className="flex items-center gap-2">
                         <span className="text-sm text-gray-600">Estado:</span>
                         <span className={`px-3 py-1 rounded-full text-sm font-medium ${status === 'RECIBIDO' ? 'bg-blue-100 text-blue-800' :
-                                status === 'EN_REPARACION' ? 'bg-yellow-100 text-yellow-800' :
-                                    status === 'REPARADO' ? 'bg-green-100 text-green-800' :
-                                        'bg-gray-100 text-gray-800'
+                            status === 'EN_REPARACION' ? 'bg-yellow-100 text-yellow-800' :
+                                status === 'REPARADO' ? 'bg-green-100 text-green-800' :
+                                    'bg-gray-100 text-gray-800'
                             }`}>
                             {status.replace('_', ' ')}
                         </span>
@@ -238,6 +239,11 @@ export default function TicketDetailPage() {
                         >
                             {saving ? 'Guardando...' : 'Guardar Cambios'}
                         </button>
+
+                        {/* Botón Imprimir */}
+                        <div className="mt-4">
+                            <ThermalPrint ticket={ticket} />
+                        </div>
                     </div>
                 </div>
             </div>
