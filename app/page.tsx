@@ -16,20 +16,27 @@ import {
 export default function Dashboard() {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('TODOS');
+
+  const fetchData = async () => {
+    try {
+      const params = new URLSearchParams();
+      if (searchTerm) params.append('search', searchTerm);
+      if (statusFilter && statusFilter !== 'TODOS') params.append('status', statusFilter);
+
+      const res = await axios.get(`/api/tickets?${params.toString()}`);
+      setData(res.data);
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios.get('/api/tickets');
-        setData(res.data);
-      } catch (error) {
-        console.error('Error fetching dashboard data:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchData();
-  }, []);
+  }, [searchTerm, statusFilter]);
 
   if (loading) {
     return (
@@ -64,6 +71,34 @@ export default function Dashboard() {
             <ClipboardList size={18} />
             Nueva Orden
           </Link>
+        </div>
+      </div>
+
+      {/* Search and Filters */}
+      <div className="bg-card p-4 rounded-2xl border shadow-sm">
+        <div className="flex flex-col md:flex-row gap-4">
+          <div className="flex-1">
+            <input
+              type="text"
+              placeholder="Buscar por código, cliente, cédula o dispositivo..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            />
+          </div>
+          <div className="w-full md:w-48">
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            >
+              <option value="TODOS">Todos los estados</option>
+              <option value="RECIBIDO">Recibido</option>
+              <option value="EN_REPARACION">En Reparación</option>
+              <option value="REPARADO">Reparado</option>
+              <option value="ENTREGADO">Entregado</option>
+            </select>
+          </div>
         </div>
       </div>
 

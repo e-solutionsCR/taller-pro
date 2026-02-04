@@ -49,12 +49,34 @@ export async function POST(request: Request) {
     }
 }
 
-export async function GET() {
+export async function GET(request: Request) {
     try {
+        const { searchParams } = new URL(request.url);
+        const search = searchParams.get('search') || '';
+        const status = searchParams.get('status') || '';
+
+        // Build where clause
+        const where: any = {};
+
+        if (status && status !== 'TODOS') {
+            where.status = status;
+        }
+
+        if (search) {
+            where.OR = [
+                { codigo: { contains: search } },
+                { client: { nombre: { contains: search } } },
+                { client: { cedula: { contains: search } } },
+                { tipoDispositivo: { contains: search } },
+                { marcaModelo: { contains: search } }
+            ];
+        }
+
         const tickets = await prisma.ticket.findMany({
+            where,
             orderBy: { createdAt: 'desc' },
             include: { client: true },
-            take: 20
+            take: 100
         });
 
         const stats = await prisma.ticket.groupBy({
