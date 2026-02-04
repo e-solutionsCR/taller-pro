@@ -12,6 +12,7 @@ import {
   ArrowRight,
   Loader2
 } from 'lucide-react';
+import ExportButton from '@/components/ExportButton';
 
 export default function Dashboard() {
   const [data, setData] = useState<any>(null);
@@ -67,6 +68,7 @@ export default function Dashboard() {
           <p className="text-muted-foreground mt-1">Este es el resumen de actividad de tu taller para hoy.</p>
         </div>
         <div className="flex gap-3">
+          <ExportButton />
           <Link href="/tickets/new" className="bg-primary text-primary-foreground px-4 py-2 rounded-lg font-medium hover:opacity-90 transition-opacity flex items-center gap-2 shadow-sm">
             <ClipboardList size={18} />
             Nueva Orden
