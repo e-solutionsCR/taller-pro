@@ -91,27 +91,29 @@ export default function Dashboard() {
           </div>
           <div className="divide-y">
             {tickets.length > 0 ? tickets.map((ticket: any) => (
-              <div key={ticket.id} className="p-4 hover:bg-muted/50 transition-colors flex items-center justify-between group">
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-xs font-bold text-muted-foreground uppercase">
-                    {ticket.tipoDispositivo.substring(0, 2)}
+              <Link key={ticket.id} href={`/tickets/${ticket.id}`} className="block">
+                <div className="p-4 hover:bg-muted/50 transition-colors flex items-center justify-between group cursor-pointer">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-xs font-bold text-muted-foreground uppercase">
+                      {ticket.tipoDispositivo.substring(0, 2)}
+                    </div>
+                    <div>
+                      <p className="font-semibold">{ticket.marcaModelo || ticket.tipoDispositivo}</p>
+                      <p className="text-xs text-muted-foreground">{ticket.client?.nombre} • {ticket.codigo || ticket.id}</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-semibold">{ticket.marcaModelo || ticket.tipoDispositivo}</p>
-                    <p className="text-xs text-muted-foreground">{ticket.client?.nombre} • {ticket.codigo || ticket.id}</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-4">
-                  <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase ${ticket.status === 'LISTO' ? 'bg-emerald-100 text-emerald-700' :
+                  <div className="flex items-center gap-4">
+                    <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase ${ticket.status === 'LISTO' ? 'bg-emerald-100 text-emerald-700' :
                       ticket.status === 'DIAGNOSTICO' ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-700'
-                    }`}>
-                    {ticket.status}
-                  </span>
-                  <p className="text-xs text-muted-foreground w-32 text-right">
-                    {new Date(ticket.createdAt).toLocaleDateString('es-CR')}
-                  </p>
+                      }`}>
+                      {ticket.status}
+                    </span>
+                    <p className="text-xs text-muted-foreground w-32 text-right">
+                      {new Date(ticket.createdAt).toLocaleDateString('es-CR')}
+                    </p>
+                  </div>
                 </div>
-              </div>
+              </Link>
             )) : (
               <div className="p-10 text-center text-muted-foreground">
                 No hay tickets registrados aún.
