@@ -6,7 +6,6 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "start": "next start",
     "lint": "eslint",
     "postinstall": "prisma generate"
   },
@@ -14,7 +13,7 @@
     "node": "22.x"
   },
   "dependencies": {
-    "@prisma/client": "^7.3.0",
+    "@prisma/client": "6.19.1",
     "axios": "^1.13.4",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
@@ -33,7 +32,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
-    "prisma": "^7.3.0",
+    "prisma": "6.19.1",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
