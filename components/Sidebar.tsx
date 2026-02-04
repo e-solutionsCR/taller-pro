@@ -1,10 +1,13 @@
+'use client';
+
 import Link from 'next/link'
 import { LayoutDashboard, Ticket, Users, Settings, Wrench } from 'lucide-react'
+import NotificationPanel from './NotificationPanel'
 
 const navItems = [
   { name: 'Panel Control', href: '/', icon: LayoutDashboard },
   { name: 'Tickets / Ordenes', href: '/tickets', icon: Ticket },
-  { name: 'Clientes', href: '/clientes', icon: Users },
+  { name: 'Clientes', href: '/clients', icon: Users },
   { name: 'Configuración', href: '/configuracion', icon: Settings },
 ]
 
@@ -15,9 +18,10 @@ export function Sidebar() {
         <div className="bg-primary rounded-lg p-2 text-primary-foreground">
           <Wrench size={24} />
         </div>
-        <h1 className="font-bold text-xl tracking-tight">TallerPro</h1>
+        <h1 className="font-bold text-xl tracking-tight flex-1">TallerPro</h1>
+        <NotificationPanel />
       </div>
-      
+
       <nav className="flex-1 px-4 space-y-2">
         {navItems.map((item) => (
           <Link
