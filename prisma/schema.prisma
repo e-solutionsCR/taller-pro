@@ -5,7 +5,6 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = env("DATABASE_URL")
 }
 
 model Client {
@@ -37,4 +36,20 @@ model Ticket {
   client          Client   @relation(fields: [clientId], references: [id])
 
   @@index([clientId], map: "Ticket_clientId_fkey")
+}
+
+model TipoDispositivo {
+  id        Int      @id @default(autoincrement())
+  nombre    String   @unique
+  activo    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Marca {
+  id        Int      @id @default(autoincrement())
+  nombre    String   @unique
+  activo    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
