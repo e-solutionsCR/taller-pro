@@ -6,9 +6,10 @@ export const dynamic = 'force-dynamic';
 // GET /api/tickets/[id] - Obtener ticket por ID
 export async function GET(
     request: Request,
-    { params }: { params: { id: string } }
+    context: { params: Promise<{ id: string }> }
 ) {
     try {
+        const params = await context.params;
         const ticket = await prisma.ticket.findUnique({
             where: { id: parseInt(params.id) },
             include: {
@@ -30,9 +31,10 @@ export async function GET(
 // PATCH /api/tickets/[id] - Actualizar ticket
 export async function PATCH(
     request: Request,
-    { params }: { params: { id: string } }
+    context: { params: Promise<{ id: string }> }
 ) {
     try {
+        const params = await context.params;
         const body = await request.json();
         const { diagnostico, costo, status } = body;
 
