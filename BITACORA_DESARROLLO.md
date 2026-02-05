@@ -1,10 +1,10 @@
 # 📔 Bitácora de Desarrollo - Proyecto TallerPro
-**Última actualización:** 04 Feb 2026
-**Estado:** Funcional en Producción
+**Última actualización:** 04 Feb 2026 21:40
+**Estado:** ✅ Funcional en Producción con Seguridad Completa
 
 ---
 
-## 🚀 Resumen de Funcionalidades Implementadas (Sesión Actual)
+## 🚀 Resumen de Funcionalidades Implementadas
 
 ### 1. 🔍 Búsqueda y Filtros
 - **Implementación:** Se agregaron campos de búsqueda y filtro por estado en el Dashboard principal.
@@ -41,15 +41,18 @@
 ### 8. 🛡️ Mantenimiento de Usuarios
 - **Nueva Página:** `/users`
 - **Funcionalidad:** Alta, baja y modificación de usuarios con roles y contraseñas.
-- **Seguridad:** Contraseñas encriptadas con bcrypt.
+- **Seguridad:** Contraseñas encriptadas con bcryptjs (compatible con Alpine Linux).
 - **APIs:** CRUD completo en `/api/users`.
 
-### 9. 🔐 Sistema de Autenticación y Seguridad
+### 9. 🔐 Sistema de Autenticación y Seguridad ⭐ NUEVO
 - **Implementación:** `next-auth` (v4) con Credentials Provider.
 - **Login:** Nueva página `/login` con diseño moderno y manejo de errores.
 - **Protección:** Middleware (`middleware.ts`) protege todas las rutas excepto login y assets estáticos.
-- **Backend:** `lib/auth.ts` con configuración segura y hashing bcrypt.
-- **Usuario Admin:** Script `create_admin.js` para generar usuario inicial (admin@tallerpro.com / admin).
+- **Backend:** `lib/auth.ts` con configuración segura y hashing bcryptjs.
+- **Usuario Admin:** `admin@tallerpro.com` / `admin`
+- **Despliegue en Producción:** ✅ Activo en `http://217.216.89.248:3000`
+  - Variables de entorno configuradas (`NEXTAUTH_SECRET`, `NEXTAUTH_URL`)
+  - Migración de `bcrypt` a `bcryptjs` para compatibilidad Docker Alpine
 
 ---
 
@@ -102,7 +105,7 @@ Esta sección documenta los problemas críticos encontrados y cómo se resolvier
 
 ## 📝 Pendientes / Siguientes Pasos
 
-1. **Seguridad / Login:** Integrar NextAuth con el nuevo modelo de Usuarios.
+1. ~~**Seguridad / Login:** Integrar NextAuth con el nuevo modelo de Usuarios.~~ ✅ **COMPLETADO**
 2. **Facturación Real:** Integración con Hacienda.
 3. **Mantenimiento de Clientes:** Completar edición y actualizaciones.
 

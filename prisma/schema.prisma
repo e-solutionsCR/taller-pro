@@ -66,4 +66,30 @@ model User {
   activo    Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  passwordResetTokens PasswordResetToken[]
+}
+
+model EmailConfig {
+  id           Int      @id @default(autoincrement())
+  smtpHost     String
+  smtpPort     Int
+  smtpUser     String
+  smtpPassword String   // Encrypted
+  fromEmail    String
+  fromName     String
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model PasswordResetToken {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  userId    Int
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }

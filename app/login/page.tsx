@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Lock, Mail, Loader2, AlertCircle, Cpu } from 'lucide-react';
+import Link from 'next/link';
 
 export default function LoginPage() {
     const router = useRouter();
@@ -113,9 +114,9 @@ export default function LoginPage() {
                     <div className="mt-8 text-center">
                         <p className="text-sm text-gray-500">
                             ¿Olvidaste tu contraseña?{' '}
-                            <a href="#" className="text-primary font-semibold hover:underline">
-                                Contactar Admin
-                            </a>
+                            <Link href="/forgot-password" className="text-primary font-semibold hover:underline">
+                                Recuperar acceso
+                            </Link>
                         </p>
                     </div>
                 </div>
