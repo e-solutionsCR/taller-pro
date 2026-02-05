@@ -1,13 +1,14 @@
 'use client';
 
 import Link from 'next/link'
-import { LayoutDashboard, Ticket, Users, Settings, Wrench, TrendingUp } from 'lucide-react'
+import { LayoutDashboard, Ticket, Users, Settings, Wrench, TrendingUp, Shield } from 'lucide-react'
 import NotificationPanel from './NotificationPanel'
 
 const navItems = [
   { name: 'Panel Control', href: '/', icon: LayoutDashboard },
   { name: 'Tickets / Ordenes', href: '/tickets', icon: Ticket },
   { name: 'Clientes', href: '/clients', icon: Users },
+  { name: 'Usuarios', href: '/users', icon: Shield },
   { name: 'Estadísticas', href: '/stats', icon: TrendingUp },
   { name: 'Configuración', href: '/configuracion', icon: Settings },
 ]

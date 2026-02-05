@@ -38,6 +38,19 @@
 - **Funcionalidad:** Gestión CRUD de **Tipos de Dispositivos** y **Marcas**.
 - **Integración:** El formulario de "Nuevo Ticket" ahora usa dropdowns dinámicos cargados desde estos catálogos.
 
+### 8. 🛡️ Mantenimiento de Usuarios
+- **Nueva Página:** `/users`
+- **Funcionalidad:** Alta, baja y modificación de usuarios con roles y contraseñas.
+- **Seguridad:** Contraseñas encriptadas con bcrypt.
+- **APIs:** CRUD completo en `/api/users`.
+
+### 9. 🔐 Sistema de Autenticación y Seguridad
+- **Implementación:** `next-auth` (v4) con Credentials Provider.
+- **Login:** Nueva página `/login` con diseño moderno y manejo de errores.
+- **Protección:** Middleware (`middleware.ts`) protege todas las rutas excepto login y assets estáticos.
+- **Backend:** `lib/auth.ts` con configuración segura y hashing bcrypt.
+- **Usuario Admin:** Script `create_admin.js` para generar usuario inicial (admin@tallerpro.com / admin).
+
 ---
 
 ## 🔧 Desafíos Técnicos y Soluciones (IMPORTANTE LEER)
@@ -89,10 +102,9 @@ Esta sección documenta los problemas críticos encontrados y cómo se resolvier
 
 ## 📝 Pendientes / Siguientes Pasos
 
-1. **Seguridad / Login:** Actualmente el sistema está abierto. Se necesita implementar autenticación (NextAuth).
-2. **Mantenimiento de Usuarios:** Crear usuarios del sistema para login.
-3. **Mantenimiento de Clientes:** Edición completa de clientes (ahora solo se crean al recibir ticket).
-4. **Facturación Real:** Integración con Hacienda (ya hay intentos previos de esto en otros chats).
+1. **Seguridad / Login:** Integrar NextAuth con el nuevo modelo de Usuarios.
+2. **Facturación Real:** Integración con Hacienda.
+3. **Mantenimiento de Clientes:** Completar edición y actualizaciones.
 
 ---
 **Nota para el Agente:** Si necesitas reiniciar el servidor, usa siempre el comando de docker completo documentado en los logs de la sesión anterior que incluye la red `coolify`, el volumen `/app` y la `DATABASE_URL` con el host correcto.

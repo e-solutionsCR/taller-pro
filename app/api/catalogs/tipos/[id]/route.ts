@@ -11,11 +11,13 @@ export async function PATCH(
     try {
         const params = await context.params;
         const body = await request.json();
-        const { nombre, activo } = body;
+        const { nombre, activo, precioRevision, precioReparacionMinima } = body;
 
         const updateData: any = {};
         if (nombre !== undefined) updateData.nombre = nombre;
         if (activo !== undefined) updateData.activo = activo;
+        if (precioRevision !== undefined) updateData.precioRevision = precioRevision;
+        if (precioReparacionMinima !== undefined) updateData.precioReparacionMinima = precioReparacionMinima;
 
         const tipo = await prisma.tipoDispositivo.update({
             where: { id: parseInt(params.id) },

@@ -42,6 +42,8 @@ model Ticket {
 model TipoDispositivo {
   id        Int      @id @default(autoincrement())
   nombre    String   @unique
+  precioRevision Decimal @default(0)
+  precioReparacionMinima Decimal @default(0)
   activo    Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -50,6 +52,17 @@ model TipoDispositivo {
 model Marca {
   id        Int      @id @default(autoincrement())
   nombre    String   @unique
+  activo    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  nombre    String
+  email     String   @unique
+  password  String
+  rol       String   @default("USER")
   activo    Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

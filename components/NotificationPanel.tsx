@@ -129,7 +129,7 @@ export default function NotificationPanel() {
 
             {/* Notification Panel */}
             {isOpen && (
-                <div className="absolute right-0 mt-2 w-96 bg-white rounded-lg shadow-2xl border border-gray-200 z-50">
+                <div className="absolute left-0 mt-2 w-96 bg-white rounded-lg shadow-2xl border border-gray-200 z-50">
                     <div className="p-4 border-b flex items-center justify-between">
                         <h3 className="font-bold text-lg">Notificaciones</h3>
                         <button

@@ -7,6 +7,8 @@ interface Tipo {
     id: number;
     nombre: string;
     activo: boolean;
+    precioRevision: number;
+    precioReparacionMinima: number;
 }
 
 interface Marca {
@@ -21,7 +23,12 @@ export default function ConfigPage() {
     const [marcas, setMarcas] = useState<Marca[]>([]);
     const [editingId, setEditingId] = useState<number | null>(null);
     const [editValue, setEditValue] = useState('');
+    const [editPrecioRev, setEditPrecioRev] = useState('');
+    const [editPrecioRep, setEditPrecioRep] = useState('');
+
     const [newValue, setNewValue] = useState('');
+    const [newPrecioRev, setNewPrecioRev] = useState('');
+    const [newPrecioRep, setNewPrecioRep] = useState('');
 
     useEffect(() => {
         fetchTipos();
@@ -45,10 +52,16 @@ export default function ConfigPage() {
         const res = await fetch('/api/catalogs/tipos', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ nombre: newValue })
+            body: JSON.stringify({
+                nombre: newValue,
+                precioRevision: parseFloat(newPrecioRev) || 0,
+                precioReparacionMinima: parseFloat(newPrecioRep) || 0
+            })
         });
         if (res.ok) {
             setNewValue('');
+            setNewPrecioRev('');
+            setNewPrecioRep('');
             fetchTipos();
         } else {
             const error = await res.json();
@@ -76,7 +89,11 @@ export default function ConfigPage() {
         const res = await fetch(`/api/catalogs/tipos/${id}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ nombre: editValue })
+            body: JSON.stringify({
+                nombre: editValue,
+                precioRevision: parseFloat(editPrecioRev) || 0,
+                precioReparacionMinima: parseFloat(editPrecioRep) || 0
+            })
         });
         if (res.ok) {
             setEditingId(null);
@@ -119,8 +136,8 @@ export default function ConfigPage() {
                         <button
                             onClick={() => setActiveTab('tipos')}
                             className={`flex-1 px-6 py-4 font-semibold ${activeTab === 'tipos'
-                                    ? 'text-blue-600 border-b-2 border-blue-600'
-                                    : 'text-gray-600 hover:text-gray-800'
+                                ? 'text-blue-600 border-b-2 border-blue-600'
+                                : 'text-gray-600 hover:text-gray-800'
                                 }`}
                         >
                             Tipos de Dispositivos
@@ -128,8 +145,8 @@ export default function ConfigPage() {
                         <button
                             onClick={() => setActiveTab('marcas')}
                             className={`flex-1 px-6 py-4 font-semibold ${activeTab === 'marcas'
-                                    ? 'text-blue-600 border-b-2 border-blue-600'
-                                    : 'text-gray-600 hover:text-gray-800'
+                                ? 'text-blue-600 border-b-2 border-blue-600'
+                                : 'text-gray-600 hover:text-gray-800'
                                 }`}
                         >
                             Marcas
@@ -140,18 +157,47 @@ export default function ConfigPage() {
                 {/* Content */}
                 <div className="bg-white rounded-lg shadow-lg p-6">
                     {/* Add New */}
-                    <div className="flex gap-3 mb-6">
-                        <input
-                            type="text"
-                            placeholder={`Nuevo ${activeTab === 'tipos' ? 'tipo' : 'marca'}...`}
-                            value={newValue}
-                            onChange={(e) => setNewValue(e.target.value)}
-                            onKeyDown={(e) => e.key === 'Enter' && (activeTab === 'tipos' ? handleAddTipo() : handleAddMarca())}
-                            className="flex-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                        />
+                    <div className="flex flex-wrap gap-3 mb-6 items-end">
+                        <div className="flex-1 min-w-[200px]">
+                            <label className="block text-xs text-gray-500 mb-1 ml-1">Nombre</label>
+                            <input
+                                type="text"
+                                placeholder={`Nuevo ${activeTab === 'tipos' ? 'tipo' : 'marca'}...`}
+                                value={newValue}
+                                onChange={(e) => setNewValue(e.target.value)}
+                                onKeyDown={(e) => e.key === 'Enter' && (activeTab === 'tipos' ? handleAddTipo() : handleAddMarca())}
+                                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                            />
+                        </div>
+
+                        {activeTab === 'tipos' && (
+                            <>
+                                <div className="w-32">
+                                    <label className="block text-xs text-gray-500 mb-1 ml-1">Min. Revisión</label>
+                                    <input
+                                        type="number"
+                                        placeholder="0.00"
+                                        value={newPrecioRev}
+                                        onChange={(e) => setNewPrecioRev(e.target.value)}
+                                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                                    />
+                                </div>
+                                <div className="w-32">
+                                    <label className="block text-xs text-gray-500 mb-1 ml-1">Min. Reparación</label>
+                                    <input
+                                        type="number"
+                                        placeholder="0.00"
+                                        value={newPrecioRep}
+                                        onChange={(e) => setNewPrecioRep(e.target.value)}
+                                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                                    />
+                                </div>
+                            </>
+                        )}
+
                         <button
                             onClick={() => activeTab === 'tipos' ? handleAddTipo() : handleAddMarca()}
-                            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2"
+                            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2 h-[42px]"
                         >
                             <Plus size={20} />
                             Agregar
@@ -164,35 +210,59 @@ export default function ConfigPage() {
                             tipos.filter(t => t.activo).map(tipo => (
                                 <div key={tipo.id} className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50">
                                     {editingId === tipo.id ? (
-                                        <div className="flex-1 flex gap-2">
+                                        <div className="flex-1 flex flex-wrap gap-2 items-center">
                                             <input
                                                 type="text"
                                                 value={editValue}
                                                 onChange={(e) => setEditValue(e.target.value)}
-                                                className="flex-1 px-3 py-1 border rounded focus:ring-2 focus:ring-blue-500"
+                                                className="flex-1 min-w-[200px] px-3 py-1 border rounded focus:ring-2 focus:ring-blue-500"
                                                 autoFocus
                                             />
-                                            <button
-                                                onClick={() => handleUpdateTipo(tipo.id)}
-                                                className="p-1 text-green-600 hover:bg-green-100 rounded"
-                                            >
-                                                <Check size={20} />
-                                            </button>
-                                            <button
-                                                onClick={() => setEditingId(null)}
-                                                className="p-1 text-red-600 hover:bg-red-100 rounded"
-                                            >
-                                                <X size={20} />
-                                            </button>
+                                            <input
+                                                type="number"
+                                                placeholder="Rev"
+                                                value={editPrecioRev}
+                                                onChange={(e) => setEditPrecioRev(e.target.value)}
+                                                className="w-24 px-3 py-1 border rounded focus:ring-2 focus:ring-blue-500"
+                                            />
+                                            <input
+                                                type="number"
+                                                placeholder="Rep"
+                                                value={editPrecioRep}
+                                                onChange={(e) => setEditPrecioRep(e.target.value)}
+                                                className="w-24 px-3 py-1 border rounded focus:ring-2 focus:ring-blue-500"
+                                            />
+                                            <div className="flex gap-1">
+                                                <button
+                                                    onClick={() => handleUpdateTipo(tipo.id)}
+                                                    className="p-1 text-green-600 hover:bg-green-100 rounded"
+                                                >
+                                                    <Check size={20} />
+                                                </button>
+                                                <button
+                                                    onClick={() => setEditingId(null)}
+                                                    className="p-1 text-red-600 hover:bg-red-100 rounded"
+                                                >
+                                                    <X size={20} />
+                                                </button>
+                                            </div>
                                         </div>
                                     ) : (
                                         <>
-                                            <span className="font-medium">{tipo.nombre}</span>
+                                            <div className="flex-1">
+                                                <span className="font-medium block text-gray-800">{tipo.nombre}</span>
+                                                <div className="text-xs text-gray-500 flex gap-4 mt-1">
+                                                    <span>Min. Revisión: ₡{Number(tipo.precioRevision).toLocaleString()}</span>
+                                                    <span>Min. Reparación: ₡{Number(tipo.precioReparacionMinima).toLocaleString()}</span>
+                                                </div>
+                                            </div>
                                             <div className="flex gap-2">
                                                 <button
                                                     onClick={() => {
                                                         setEditingId(tipo.id);
                                                         setEditValue(tipo.nombre);
+                                                        setEditPrecioRev(String(tipo.precioRevision));
+                                                        setEditPrecioRep(String(tipo.precioReparacionMinima));
                                                     }}
                                                     className="p-1 text-blue-600 hover:bg-blue-100 rounded"
                                                 >
