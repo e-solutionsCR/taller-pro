@@ -93,3 +93,16 @@ model PasswordResetToken {
 
   @@index([userId])
 }
+
+model BusinessConfig {
+  id            Int      @id @default(autoincrement())
+  nombre        String   @default("TallerPro")
+  lema          String?
+  telefono      String?
+  email         String?
+  direccion     String?
+  sitioWeb      String?
+  mensajeTicket String?
+  logoUrl       String?
+  updatedAt     DateTime @updatedAt
+}

@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Plus, Edit2, Trash2, Check, X } from 'lucide-react';
 import EmailConfigTab from '@/components/EmailConfigTab';
+import BusinessConfigTab from '@/components/BusinessConfigTab';
 
 interface Tipo {
     id: number;
@@ -19,14 +20,13 @@ interface Marca {
 }
 
 export default function ConfigPage() {
-    const [activeTab, setActiveTab] = useState<'tipos' | 'marcas' | 'email'>('tipos');
+    const [activeTab, setActiveTab] = useState<'tipos' | 'marcas' | 'email' | 'empresa'>('tipos');
     const [tipos, setTipos] = useState<Tipo[]>([]);
     const [marcas, setMarcas] = useState<Marca[]>([]);
     const [editingId, setEditingId] = useState<number | null>(null);
     const [editValue, setEditValue] = useState('');
     const [editPrecioRev, setEditPrecioRev] = useState('');
     const [editPrecioRep, setEditPrecioRep] = useState('');
-
     const [newValue, setNewValue] = useState('');
     const [newPrecioRev, setNewPrecioRev] = useState('');
     const [newPrecioRep, setNewPrecioRep] = useState('');
@@ -133,10 +133,10 @@ export default function ConfigPage() {
 
                 {/* Tabs */}
                 <div className="bg-white rounded-lg shadow-lg mb-6">
-                    <div className="flex border-b">
+                    <div className="flex border-b overflow-x-auto">
                         <button
                             onClick={() => setActiveTab('tipos')}
-                            className={`flex-1 px-6 py-4 font-semibold ${activeTab === 'tipos'
+                            className={`flex-1 px-6 py-4 font-semibold whitespace-nowrap ${activeTab === 'tipos'
                                 ? 'text-blue-600 border-b-2 border-blue-600'
                                 : 'text-gray-600 hover:text-gray-800'
                                 }`}
@@ -145,7 +145,7 @@ export default function ConfigPage() {
                         </button>
                         <button
                             onClick={() => setActiveTab('marcas')}
-                            className={`flex-1 px-6 py-4 font-semibold ${activeTab === 'marcas'
+                            className={`flex-1 px-6 py-4 font-semibold whitespace-nowrap ${activeTab === 'marcas'
                                 ? 'text-blue-600 border-b-2 border-blue-600'
                                 : 'text-gray-600 hover:text-gray-800'
                                 }`}
@@ -153,8 +153,17 @@ export default function ConfigPage() {
                             Marcas
                         </button>
                         <button
+                            onClick={() => setActiveTab('empresa')}
+                            className={`flex-1 px-6 py-4 font-semibold whitespace-nowrap ${activeTab === 'empresa'
+                                ? 'text-blue-600 border-b-2 border-blue-600'
+                                : 'text-gray-600 hover:text-gray-800'
+                                }`}
+                        >
+                            Datos Empresa
+                        </button>
+                        <button
                             onClick={() => setActiveTab('email')}
-                            className={`flex-1 px-6 py-4 font-semibold ${activeTab === 'email'
+                            className={`flex-1 px-6 py-4 font-semibold whitespace-nowrap ${activeTab === 'email'
                                 ? 'text-blue-600 border-b-2 border-blue-600'
                                 : 'text-gray-600 hover:text-gray-800'
                                 }`}
@@ -168,6 +177,10 @@ export default function ConfigPage() {
                 {activeTab === 'email' ? (
                     <div className="bg-white rounded-lg shadow-lg p-6">
                         <EmailConfigTab />
+                    </div>
+                ) : activeTab === 'empresa' ? (
+                    <div className="bg-white rounded-lg shadow-lg p-6">
+                        <BusinessConfigTab />
                     </div>
                 ) : (
                     <div className="bg-white rounded-lg shadow-lg p-6">{/* Add New */}

@@ -38,10 +38,12 @@ export default function TicketDetailPage() {
     const [diagnostico, setDiagnostico] = useState('');
     const [costo, setCosto] = useState('');
     const [status, setStatus] = useState('RECIBIDO');
+    const [businessConfig, setBusinessConfig] = useState<any>(null);
 
     useEffect(() => {
         if (ticketId) {
             fetchTicket();
+            fetchBusinessConfig();
         }
     }, [ticketId]);
 
@@ -60,6 +62,18 @@ export default function TicketDetailPage() {
             console.error('Error:', error);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const fetchBusinessConfig = async () => {
+        try {
+            const res = await fetch('/api/business-config');
+            if (res.ok) {
+                const data = await res.json();
+                setBusinessConfig(data);
+            }
+        } catch (error) {
+            console.error('Error fetching business config:', error);
         }
     };
 
@@ -242,7 +256,12 @@ export default function TicketDetailPage() {
 
                         {/* Botón Imprimir */}
                         <div className="mt-4">
-                            <ThermalPrint ticket={ticket} />
+                            <ThermalPrint
+                                ticket={ticket}
+                                shopName={businessConfig?.nombre}
+                                shopPhone={businessConfig?.telefono}
+                                shopAddress={businessConfig?.direccion}
+                            />
                         </div>
                     </div>
                 </div>
