@@ -111,3 +111,5 @@ Esta sección documenta los problemas críticos encontrados y cómo se resolvier
 
 ---
 **Nota para el Agente:** Si necesitas reiniciar el servidor, usa siempre el comando de docker completo documentado en los logs de la sesión anterior que incluye la red `coolify`, el volumen `/app` y la `DATABASE_URL` con el host correcto.
+
+<!-- Force Deploy Mark: Email System Ready -->
